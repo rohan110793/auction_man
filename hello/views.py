@@ -22,7 +22,7 @@ config = {
 }
 
 firebase = pyrebase.initialize_app(config)
-authenticate = firebase.auth()
+auth = firebase.auth()
 database = firebase.database()
 
 #this is views
@@ -34,4 +34,17 @@ def home(request):
     return render (request, 'index.html', {
         "auction_username" : auction_username,
         "auction_about" : auction_about
+    })
+
+def signIn(request):
+    return render(request, 'signin.html')
+
+def postsign(request):
+    email =  request.POST.get('email')
+    password = request.POST.get('password')
+
+    auth.sign_in_with_email_and_password(email, password)
+
+    return render (request, 'welcome.html', {
+        "email" : email
     })
