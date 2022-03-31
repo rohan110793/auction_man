@@ -167,6 +167,7 @@ cython_debug/
 .idea
 **/node_modules/*
 **/.firebaserc
+serviceAccountKey.json
 
 ### Firebase Patch ###
 .runtimeconfig.json
