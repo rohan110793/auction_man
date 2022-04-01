@@ -4,6 +4,13 @@ from django.shortcuts import render
 from dotenv import load_dotenv
 import pyrebase
 
+
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+
+
 load_dotenv()
 
 # Create your views here.
@@ -22,19 +29,37 @@ config = {
 }
 
 firebase = pyrebase.initialize_app(config)
-authenticate = firebase.auth()
-database = firebase.database()
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+auth = firebase.auth()
+database = firestore.client()
+# database = firebase.database()
 
 #this is views
 
 
 def home(request):
-    auction_username = database.child('Data').child('Username').get().val()
-    auction_about = database.child('Data').child('About').get().val()
-    auction_college = database.child('Data').child('College').get().val()
+    currUser = database.collection('users').document('WXiNFxxa2vfqrysEWuQ7').get().to_dict() # I'm hardcoded here just to get an idea what we can do
+    auction_username = currUser['username'] 
+    auction_about = currUser['about']
     # return HttpResponse("Hello, Django! and auction man")
     return render(request, 'index.html', {
         "auction_username": auction_username,
         "auction_about": auction_about,
         "auction_college": auction_college
+    })
+
+def signIn(request):
+    return render(request, 'signin.html')
+
+def postsign(request):
+    email =  request.POST.get('email')
+    password = request.POST.get('password')
+
+    auth.sign_in_with_email_and_password(email, password)
+    # After ^this function runs, we want to take the unique id of that user and search in our firestore database for that user
+    # and take their name and pass it to our page
+
+    return render (request, 'welcome.html', {
+        "email" : email
     })
