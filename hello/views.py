@@ -38,8 +38,8 @@ database = firestore.client()
 #this is views
 
 def home(request):
-    currUser = database.collection('users').document('WXiNFxxa2vfqrysEWuQ7').get().to_dict()
-    auction_username = currUser['username']
+    currUser = database.collection('users').document('WXiNFxxa2vfqrysEWuQ7').get().to_dict() # I'm hardcoded here just to get an idea what we can do
+    auction_username = currUser['username'] 
     auction_about = currUser['about']
     # return HttpResponse("Hello, Django! and auction man")
     return render (request, 'index.html', {
