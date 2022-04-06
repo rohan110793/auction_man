@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+import os
 from django.shortcuts import render
 from dotenv import load_dotenv
 import pyrebase
@@ -10,11 +12,9 @@ from firebase_admin import firestore
 
 
 load_dotenv()
-import os
 
 # Create your views here.
 
-from django.http import HttpResponse
 
 # Configuring Firebase
 
