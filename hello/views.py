@@ -52,6 +52,14 @@ def home(request):
 def signIn(request):
     return render(request, 'signin.html')
 
+def signUp(request):
+    return render(request, 'signup.html')
+
+
+
+
+
+
 def postsign(request):
     email =  request.POST.get('email')
     password = request.POST.get('password')
@@ -63,3 +71,26 @@ def postsign(request):
     return render (request, 'welcome.html', {
         "email" : email
     })
+
+def postsignup(request):
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    confPass = request.POST.get('confPassword')
+
+    if (password == confPass):
+        userData = auth.create_user_with_email_and_password(email, password)
+        userId = userData.get('localId')
+
+        data = {
+            "username": username,
+            "email": email,
+            "userId": userId
+        }
+
+        print(userData)
+        database.collection('users').document(username).set(data)
+
+        return render (request, 'welcome.html', {
+            "username" : username
+        })
